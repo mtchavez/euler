@@ -28,4 +28,4 @@ function fib(n::Int64)
     return total
 end
 
-println(fib(4000000))
+println(@time fib(4000000))

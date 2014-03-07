@@ -37,5 +37,5 @@ function sum_below(n::Int64)
     return sum
 end
 
-println(sum_below(10))
-println(sum_below(2000000))
+println(@time sum_below(10))
+println(@time sum_below(2000000))

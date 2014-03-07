@@ -22,4 +22,4 @@ function find_sum_equal(num::Int)
 end
 
 
-println(find_sum_equal(1000))
+println(@time find_sum_equal(1000))

@@ -18,4 +18,4 @@ function largest_prime(n::Int64)
     return largest
 end
 
-println(largest_prime(600851475143))
+println(@time largest_prime(600851475143))

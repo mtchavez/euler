@@ -36,4 +36,4 @@ function get_primes(total::Int64)
     return num - 1
 end
 
-println(get_primes(10001))
+println(@time get_primes(10001))
