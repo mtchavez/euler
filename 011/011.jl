@@ -25,74 +25,44 @@ grid = [
 20 73 35 29 78 31 90 01 74 31 49 71 48 86 81 16 23 57 05 54;
 01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48;]
 
-function max_prod(g::Array)
-    dim = size(g)[1]
-    max = 0
-    for i = 1:dim
-        for j = 1:dim
-            # Up
-            if i - 3 > 0
-                if j + 3 <= dim
-                    p = prod([g[i-x, j+x] for x=0:3])
-                    if p > max
-                        #println("RIGHT-UP-DIAG: ", [g[i-x, j+x] for x=0:3])
-                        max = p
-                    end
-                end
-                if j - 3 > 0
-                    p = prod([g[i-x, j-x] for x=0:3])
-                    if p > max
-                        #println("LEFT-UP-DIAG: ", [g[i-x, j-x] for x=0:3])
-                        max = p
-                    end
-                end
-                p = prod([g[x, j] for x=i-3:i])
-                if p > max
-                    #println("UP: ", [g[x, j] for x=i-3:i])
-                    max = p
-                end
-            end
-            # Down
-            if i + 3 <= dim
-                if j + 3 <= dim
-                    p = prod([g[i+x, j+x] for x=0:3])
-                    if p > max
-                        #println("RIGHT-DOWN-DIAG: ", [g[i+x, j+x] for x=0:3])
-                        max = p
-                    end
-                end
-                p = prod([g[x, j] for x=i:i+3])
-                if p > max
-                    #println("DOWN: ", [g[x, j] for x=i:i+3])
-                    max = p
-                end
-            end
-            # Left
-            if j - 3 > 0
-                if i + 3 <= dim
-                    p = prod([g[i+x, j-x] for x=0:3])
-                    if p > max
-                        #println("LEFT-DOWN-DIAG: ", [g[i+x, j-x] for x=0:3])
-                        max = p
-                    end
-                end
-                p = prod([g[i, x] for x=j-3:j])
-                if p > max
-                    #println("LEFT: ", [g[i, x] for x=j-3:j])
-                    max = p
-                end
-            end
-            # Right
-            if j + 3 <= dim
-                p = prod([g[i, x] for x=j:j+3])
-                if p > max
-                    #println("RIGHT: ", [g[i, x] for x=j:j+3])
-                    max = p
-                end
-            end
-        end
-    end
-    return max
+width = size(grid)[1]
+height = size(grid)[2]
+
+function right(i::Int, j::Int)
+    return prod([grid[i, x] for x=j:j+3])
 end
 
-println(max_prod(grid))
+function downright(i::Int, j::Int)
+    return prod([grid[i+x, j+x] for x=0:3])
+end
+
+function down(i::Int, j::Int)
+    return prod([grid[i+x, j] for x=0:3])
+end
+
+function downleft(i::Int, j::Int)
+    return prod([grid[i+x, j-x] for x=0:3])
+end
+
+function get_prod(i::Int, j::Int)
+    if i <= width - 3
+        if 4 < j <= width - 3
+            return maximum([right(i, j), downright(i, j), down(i, j), downleft(i, j)])
+        elseif j <= 3
+            return maximum([right(i, j), downright(i, j), down(i, j)])
+        else
+            return maximum([down(i, j), downleft(i, j)])
+        end
+    else
+        if j <= width - 3
+            return right(i, j)
+        end
+        return 0
+     end
+end
+
+function calc_max_prod()
+    return maximum([maximum([get_prod(i,j) for i=1:20]) for j=1:20])
+end
+
+println(@time calc_max_prod())
