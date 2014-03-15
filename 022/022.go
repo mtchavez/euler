@@ -37,12 +37,13 @@ func main() {
 	names := readFile("names.txt")
 	sort.Strings(names)
 	total := 0
+	var nameTotal int
 	for i, name := range names {
-		nameTotal := 0
+		nameTotal = 0
 		for _, letter := range strings.Split(name, "") {
 			nameTotal += ALPHA[letter]
 		}
-		fmt.Printf("%s = %d * %d\n", name, nameTotal, i+1)
+		//fmt.Printf("%s = %d * %d\n", name, nameTotal, i+1)
 		total += nameTotal * (i + 1)
 	}
 	fmt.Printf("Total: %d\n", total)
